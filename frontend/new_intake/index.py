@@ -13,7 +13,7 @@ def new_intake_view():
     HOME = dirname(realpath(__file__))
     @st.cache(allow_output_mutation=True)
     def get_portfolio():
-        df_ = pd.read_csv('/home/william/Projects/investment-book-on-view/data/investment-portfolio/portfolio.csv', sep=';')
+        df_ = pd.read_csv(HOME + '/../data/investment-portfolio/portfolio.csv', sep=';')
         for ticker in df_["symbol"]:
             ticker_ = yf.Ticker(ticker + ".SA")
             summary = ticker_.history(period="1d")
