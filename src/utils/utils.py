@@ -1,4 +1,4 @@
-from os import listdir
+from os import listdir, makedirs
 from os.path import isfile, join, exists
 from typing import Dict
 import pandas as pd
@@ -20,6 +20,11 @@ def read_trade_confirmation(trade_confirmation_dir: str) -> Dict:
         papers[paper.date].append(paper)
     return papers
 
+def create_folder(folder: str) -> None:
+    if not exists(folder):
+        makedirs(folder)
+    return folder
+
 def get_dataframe(file: str, columns: list) -> pd.DataFrame:
     """
     This function reads a dataframe if it exists,
@@ -32,15 +37,11 @@ def get_dataframe(file: str, columns: list) -> pd.DataFrame:
     return df
 
 def save_to_file(stage: str, df: pd.DataFrame, file: str) -> None:
-    df_fees = get_dataframe(file, df.columns)
+    df_prev = get_dataframe(file, df.columns)
     tc_name = df["tc_name"].unique()[0]
-    if not df_fees.loc[(df_fees["tc_name"] == tc_name)].empty:
-        # print(
-        #     f"[INVESTMENT PORTFOLIO - {stage}] There are records from "\
-        #     f"trade confirmation {tc_name}. I am going to remove and add again"
-        # )
-        df_fees = df_fees.loc[~(df_fees["tc_name"] == tc_name)]
-    df_fees = pd.concat([df_fees, df])
-    df_fees = df_fees.sort_values(["date", "tc_name"])
-    df_fees.to_csv(file, sep=';', index=False)
+    if not df_prev.loc[(df_prev["tc_name"] == tc_name)].empty:
+        df_prev = df_prev.loc[~(df_prev["tc_name"] == tc_name)]
+    df_prev = pd.concat([df_prev, df])
+    df_prev = df_prev.sort_values(["date", "tc_name"])
+    df_prev.to_csv(file, sep=';', index=False)
     
