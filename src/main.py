@@ -9,11 +9,10 @@ COMPANIES_FILE = HOME + "/../data/companies.json"
 BROKERS_FILE = HOME + "/../data/brokers.json"
 TC_DIR = HOME + "/../data/trade-confirmation/"
 IP_DIR = HOME + "/../data/investment-portfolio/"
+EH_DIR = HOME + "/../data/earnings-history/"
 
 if __name__ == "__main__":
     trade_confirmations = read_trade_confirmation(TC_DIR)
-    companies = get_companies(COMPANIES_FILE, trade_confirmations)
+    companies = get_companies(COMPANIES_FILE, trade_confirmations, EH_DIR)
     brokers = get_brokers(BROKERS_FILE, trade_confirmations)
-    
     investment_portfolio = InvestmentPortfolio(IP_DIR, trade_confirmations)
-

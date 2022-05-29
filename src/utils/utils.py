@@ -1,4 +1,4 @@
-from os import listdir
+from os import listdir, makedirs
 from os.path import isfile, join, exists
 from typing import Dict
 import pandas as pd
@@ -19,6 +19,11 @@ def read_trade_confirmation(trade_confirmation_dir: str) -> Dict:
             papers[paper.date] = []
         papers[paper.date].append(paper)
     return papers
+
+def create_folder(folder: str) -> None:
+    if not exists(folder):
+        makedirs(folder)
+    return folder
 
 def get_dataframe(file: str, columns: list) -> pd.DataFrame:
     """
