@@ -12,14 +12,6 @@ COMPANIES_FILE = HOME + "/../../data/companies.json"
 BROKERS_FILE = HOME + "/../../data/brokers.json"
 TC_DIR = HOME + "/../../data/trade-confirmation/"
 
-@st.cache
-def get_brokers() -> Dict:
-    f = open(BROKERS_FILE)
-    brokers = json.load(f)
-    f.close()
-    brokers = [ b["id"] for b in brokers ]
-    return brokers
-
 def can_eval(dic: str) -> bool:
     try:
         eval(dic)
@@ -30,11 +22,19 @@ def can_eval(dic: str) -> bool:
         return True
 
 @st.cache
+def get_brokers() -> Dict:
+    f = open(BROKERS_FILE)
+    brokers = json.load(f)
+    f.close()
+    brokers = sorted([ b["id"] for b in brokers ])
+    return brokers
+
+@st.cache
 def get_companies() -> Dict:
     f = open(COMPANIES_FILE)
     companies = json.load(f)
     f.close()
-    companies = [ c["symbol"] for c in companies ]
+    companies = sorted([ c["symbol"] for c in companies ])
     return companies
 
 @st.cache
@@ -45,8 +45,6 @@ def get_operations() -> pd.DataFrame:
         "price": [],
         "value": []
     })
-
-
 
 def add_new_trades_view():
     st.title("Add new trades")
