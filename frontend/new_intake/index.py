@@ -11,9 +11,10 @@ from os.path import dirname, realpath
 
 def new_intake_view():
     HOME = dirname(realpath(__file__))
+
     @st.cache(allow_output_mutation=True)
     def get_portfolio():
-        df_ = pd.read_csv(HOME + '/../data/investment-portfolio/portfolio.csv', sep=';')
+        df_ = pd.read_csv(HOME + '/../../data/investment-portfolio/consolidated_portfolio.csv', sep=';')
         for ticker in df_["symbol"]:
             ticker_ = yf.Ticker(ticker + ".SA")
             summary = ticker_.history(period="1d")
@@ -26,8 +27,6 @@ def new_intake_view():
         df_["total"] = 0
         df_["intake"] = 0
         return df_
-
-
 
     # Get the portfolio
     df_i = get_portfolio()
